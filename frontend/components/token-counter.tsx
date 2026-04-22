@@ -1,6 +1,6 @@
 "use client";
 
-import { Coins } from "lucide-react";
+import { Coins, Zap } from "lucide-react";
 
 interface TokenCounterProps {
   tokens: number;
@@ -8,14 +8,29 @@ interface TokenCounterProps {
 }
 
 export function TokenCounter({ tokens, plan }: TokenCounterProps) {
+  const isPro = plan === "Pro";
+  
   return (
-    <div className="flex items-center gap-4">
-      <div className="flex items-center gap-2 bg-secondary px-4 py-2 rounded-lg">
-        <Coins className="w-4 h-4 text-primary" />
-        <span className="font-semibold text-foreground">{tokens.toLocaleString()}</span>
-        <span className="text-muted-foreground text-sm">tokens</span>
+    <div className="flex items-center gap-3">
+      <div className="glass-card flex items-center gap-3 px-5 py-2.5 rounded-2xl glow-orange">
+        <div className="p-1.5 bg-gradient-to-br from-primary/20 to-accent/20 rounded-lg">
+          <Coins className="w-4 h-4 text-primary" />
+        </div>
+        <div className="flex items-baseline gap-1.5">
+          <span className="text-lg font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            {tokens.toLocaleString()}
+          </span>
+          <span className="text-muted-foreground text-sm">tokens</span>
+        </div>
       </div>
-      <div className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
+      <div 
+        className={`flex items-center gap-1.5 px-4 py-2.5 rounded-2xl font-medium text-sm ${
+          isPro 
+            ? "bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg glow-orange" 
+            : "glass-card text-foreground glow-green"
+        }`}
+      >
+        <Zap className={`w-3.5 h-3.5 ${isPro ? "text-white" : "text-accent"}`} />
         {plan}
       </div>
     </div>

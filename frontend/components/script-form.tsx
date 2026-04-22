@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Loader2, Sparkles } from "lucide-react";
+import { Loader2, Sparkles, Wand2 } from "lucide-react";
 
 interface ScriptFormProps {
   onSubmit: (producto: string, tono: string, idioma: string) => Promise<void>;
   isLoading: boolean;
+  isStoreConnected?: boolean;
 }
 
 const tonos = [
@@ -22,24 +23,48 @@ const idiomas = [
   { value: "portugues", label: "Portugues" },
 ];
 
-export function ScriptForm({ onSubmit, isLoading }: ScriptFormProps) {
+export function ScriptForm({ onSubmit, isLoading, isStoreConnected = true }: ScriptFormProps) {
   const [producto, setProducto] = useState("");
   const [tono, setTono] = useState("profesional");
   const [idioma, setIdioma] = useState("espanol");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!producto.trim()) return;
+    if (!producto.trim() || !isStoreConnected) return;
     await onSubmit(producto, tono, idioma);
   };
 
+  if (!isStoreConnected) {
+    return (
+      <div className="glass-card rounded-3xl p-8 text-center glow-orange">
+        <div className="w-16 h-16 bg-gradient-to-br from-primary/20 to-accent/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <Sparkles className="w-8 h-8 text-primary" />
+        </div>
+        <h3 className="text-xl font-bold text-foreground mb-2">
+          Conecta tu tienda primero
+        </h3>
+        <p className="text-muted-foreground">
+          Para generar guiones personalizados, necesitas conectar tu tienda Shopify.
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <form onSubmit={handleSubmit} className="bg-card border border-border rounded-xl p-6">
-      <h2 className="text-lg font-semibold text-foreground mb-4">Generar guion</h2>
-      
-      <div className="space-y-4">
+    <form onSubmit={handleSubmit} className="glass-card rounded-3xl p-8">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="p-2.5 bg-gradient-to-br from-primary/20 to-accent/20 rounded-xl">
+          <Wand2 className="w-5 h-5 text-primary" />
+        </div>
         <div>
-          <label htmlFor="producto" className="block text-sm font-medium text-foreground mb-2">
+          <h2 className="text-lg font-bold text-foreground">Generar guion</h2>
+          <p className="text-sm text-muted-foreground">Crea contenido de marketing con IA</p>
+        </div>
+      </div>
+      
+      <div className="space-y-5">
+        <div>
+          <label htmlFor="producto" className="block text-sm font-semibold text-foreground mb-2">
             Producto
           </label>
           <input
@@ -47,57 +72,59 @@ export function ScriptForm({ onSubmit, isLoading }: ScriptFormProps) {
             type="text"
             value={producto}
             onChange={(e) => setProducto(e.target.value)}
-            placeholder="Ej: Zapatos deportivos"
-            className="w-full px-4 py-3 border border-border rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+            placeholder="Ej: Zapatos deportivos Nike Air Max"
+            className="w-full px-5 py-4 border border-border/50 rounded-2xl bg-white/50 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all"
             required
           />
         </div>
 
-        <div>
-          <label htmlFor="tono" className="block text-sm font-medium text-foreground mb-2">
-            Tono
-          </label>
-          <select
-            id="tono"
-            value={tono}
-            onChange={(e) => setTono(e.target.value)}
-            className="w-full px-4 py-3 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-          >
-            {tonos.map((t) => (
-              <option key={t.value} value={t.value}>
-                {t.label}
-              </option>
-            ))}
-          </select>
-        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label htmlFor="tono" className="block text-sm font-semibold text-foreground mb-2">
+              Tono
+            </label>
+            <select
+              id="tono"
+              value={tono}
+              onChange={(e) => setTono(e.target.value)}
+              className="w-full px-5 py-4 border border-border/50 rounded-2xl bg-white/50 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all appearance-none cursor-pointer"
+            >
+              {tonos.map((t) => (
+                <option key={t.value} value={t.value}>
+                  {t.label}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <div>
-          <label htmlFor="idioma" className="block text-sm font-medium text-foreground mb-2">
-            Idioma
-          </label>
-          <select
-            id="idioma"
-            value={idioma}
-            onChange={(e) => setIdioma(e.target.value)}
-            className="w-full px-4 py-3 border border-border rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-          >
-            {idiomas.map((i) => (
-              <option key={i.value} value={i.value}>
-                {i.label}
-              </option>
-            ))}
-          </select>
+          <div>
+            <label htmlFor="idioma" className="block text-sm font-semibold text-foreground mb-2">
+              Idioma
+            </label>
+            <select
+              id="idioma"
+              value={idioma}
+              onChange={(e) => setIdioma(e.target.value)}
+              className="w-full px-5 py-4 border border-border/50 rounded-2xl bg-white/50 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all appearance-none cursor-pointer"
+            >
+              {idiomas.map((i) => (
+                <option key={i.value} value={i.value}>
+                  {i.label}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         <button
           type="submit"
           disabled={isLoading || !producto.trim()}
-          className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full bg-gradient-to-r from-primary to-primary/80 text-white py-4 rounded-2xl font-semibold hover:shadow-xl hover:scale-[1.01] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none flex items-center justify-center gap-2 glow-orange"
         >
           {isLoading ? (
             <>
               <Loader2 className="w-5 h-5 animate-spin" />
-              Generando...
+              Generando guion...
             </>
           ) : (
             <>

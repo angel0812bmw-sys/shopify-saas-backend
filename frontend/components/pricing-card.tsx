@@ -1,59 +1,114 @@
 "use client";
 
-import { Check, Coins } from "lucide-react";
+import { Check, Coins, Sparkles, Zap } from "lucide-react";
 import type { Plan } from "@/lib/types";
 
 interface PricingCardProps {
   name: string;
   plan: Plan;
+  price?: string;
   isPopular?: boolean;
   currentPlan?: string;
 }
 
-export function PricingCard({ name, plan, isPopular, currentPlan }: PricingCardProps) {
+export function PricingCard({ name, plan, price, isPopular, currentPlan }: PricingCardProps) {
   const isCurrentPlan = currentPlan === name;
+  const isPro = name === "Pro";
 
   return (
     <div
-      className={`relative bg-card border rounded-xl p-6 flex flex-col ${
-        isPopular ? "border-primary ring-2 ring-primary/20" : "border-border"
+      className={`relative glass-card rounded-3xl p-8 flex flex-col hover-lift ${
+        isPopular 
+          ? "gradient-border glow-orange scale-105 z-10" 
+          : "border border-border/50"
       }`}
     >
       {isPopular && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-medium">
-          Mas popular
+        <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-primary to-accent text-white px-4 py-1.5 rounded-full text-sm font-medium flex items-center gap-1.5 shadow-lg">
+          <Sparkles className="w-3.5 h-3.5" />
+          Recomendado
         </div>
       )}
 
+      {/* Plan name and icon */}
       <div className="text-center mb-6">
-        <h3 className="text-xl font-bold text-foreground mb-2">{name}</h3>
-        <div className="flex items-center justify-center gap-1 text-muted-foreground">
-          <Coins className="w-4 h-4" />
-          <span className="text-2xl font-bold text-foreground">{plan.tokens.toLocaleString()}</span>
-          <span className="text-sm">tokens</span>
+        <div className={`inline-flex p-4 rounded-2xl mb-4 ${
+          isPro 
+            ? "bg-gradient-to-br from-primary/20 to-accent/20" 
+            : "bg-gradient-to-br from-muted to-secondary"
+        }`}>
+          {isPro ? (
+            <Zap className="w-8 h-8 text-primary" />
+          ) : (
+            <Coins className="w-8 h-8 text-muted-foreground" />
+          )}
         </div>
+        <h3 className={`text-2xl font-bold mb-1 ${
+          isPro 
+            ? "bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent" 
+            : "text-foreground"
+        }`}>
+          {name}
+        </h3>
+        {price && (
+          <p className="text-4xl font-bold text-foreground mt-2">
+            {price}
+            <span className="text-base font-normal text-muted-foreground">/mes</span>
+          </p>
+        )}
       </div>
 
-      <ul className="space-y-3 flex-1 mb-6">
+      {/* Tokens */}
+      <div className={`flex items-center justify-center gap-2 py-4 px-6 rounded-2xl mb-6 ${
+        isPro 
+          ? "bg-gradient-to-r from-primary/10 to-accent/10" 
+          : "bg-muted/50"
+      }`}>
+        <Coins className={`w-5 h-5 ${isPro ? "text-primary" : "text-muted-foreground"}`} />
+        <span className={`text-2xl font-bold ${isPro ? "text-primary" : "text-foreground"}`}>
+          {plan.tokens.toLocaleString()}
+        </span>
+        <span className="text-sm text-muted-foreground">tokens</span>
+      </div>
+
+      {/* Benefits */}
+      <ul className="space-y-4 flex-1 mb-8">
         {plan.beneficios.map((beneficio, index) => (
-          <li key={index} className="flex items-start gap-2">
-            <Check className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
-            <span className="text-foreground text-sm">{beneficio}</span>
+          <li key={index} className="flex items-start gap-3">
+            <div className={`p-1 rounded-full ${
+              isPro 
+                ? "bg-gradient-to-br from-primary/20 to-accent/20" 
+                : "bg-accent/10"
+            }`}>
+              <Check className={`w-4 h-4 ${isPro ? "text-primary" : "text-accent"}`} />
+            </div>
+            <span className="text-foreground">{beneficio}</span>
           </li>
         ))}
       </ul>
 
+      {/* CTA Button */}
       <button
         disabled={isCurrentPlan}
-        className={`w-full py-3 rounded-lg font-medium transition-colors ${
+        className={`w-full py-4 rounded-2xl font-semibold transition-all duration-300 ${
           isCurrentPlan
-            ? "bg-secondary text-muted-foreground cursor-not-allowed"
-            : isPopular
-            ? "bg-primary text-primary-foreground hover:bg-primary/90"
-            : "bg-secondary text-foreground hover:bg-secondary/80"
+            ? "bg-muted text-muted-foreground cursor-not-allowed"
+            : isPro
+            ? "bg-gradient-to-r from-primary to-primary/80 text-white shadow-lg hover:shadow-xl hover:scale-[1.02] glow-orange"
+            : "bg-foreground text-background hover:bg-foreground/90 hover:scale-[1.02]"
         }`}
       >
-        {isCurrentPlan ? "Plan actual" : "Upgrade"}
+        {isCurrentPlan ? (
+          <span className="flex items-center justify-center gap-2">
+            <Check className="w-5 h-5" />
+            Plan actual
+          </span>
+        ) : (
+          <span className="flex items-center justify-center gap-2">
+            {isPro && <Zap className="w-5 h-5" />}
+            Elegir plan
+          </span>
+        )}
       </button>
     </div>
   );
