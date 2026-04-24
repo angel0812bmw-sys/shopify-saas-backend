@@ -1,0 +1,12 @@
+[app]
+name = "EcomCopilot Connector"
+id = "349048373249"              # Este es el App ID que aparece en la URL del dashboard
+handle = "ecomcopilot-connector" # Identificador único de la app
+
+[auth]
+redirect_urls = [
+  "https://e8bd-154-192-63-70.ngrok-free.app/auth/shopify/callback"
+]
+
+[app_url]
+url = "https://e8bd-154-192-63-70.ngrok-free.app"
