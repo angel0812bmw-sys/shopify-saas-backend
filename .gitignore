@@ -1,2 +1,7 @@
 __pycache__/
 *.pyc
+<<<<<<< HEAD
+=======
+*.db
+shopify_app.db
+>>>>>>> 5dc14d31cca20e4658400ec954643609f281878b
