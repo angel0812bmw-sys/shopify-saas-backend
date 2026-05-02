@@ -1,14 +1,10 @@
 from fastapi import FastAPI
-from home import router as home_router
-from scripts import router as scripts_router
-from pricing import router as pricing_router
+from routes import auth  # importa el archivo routes/auth.py
 
 app = FastAPI(title="Shopify SaaS Backend")
 
-# Registrar routers
-app.include_router(home_router, prefix="/home", tags=["Home"])
-app.include_router(scripts_router, prefix="/scripts", tags=["Scripts"])
-app.include_router(pricing_router, prefix="/pricing", tags=["Pricing"])
+# Registrar el router de autenticación
+app.include_router(auth.router, tags=["Auth"])
 
 @app.get("/")
 def root():
