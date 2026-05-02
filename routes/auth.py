@@ -5,7 +5,7 @@ import requests
 router = APIRouter()
 
 CLIENT_ID = "3b407c5dc62a8a04687707e38dc8cc23"
-CLIENT_SECRET = "TU_CLIENT_SECRET"  # ⚠️ pon aquí tu client_secret real de Shopify
+CLIENT_SECRET = "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"  # ⚠️ pon aquí tu client_secret real de Shopify
 SCOPES = "read_checkouts,read_orders,read_products"
 REDIRECT_URI = "https://shopify-saas-backend-zp36.onrender.com/auth/shopify/callback"
 
@@ -31,7 +31,13 @@ def auth_callback(code: str, shop: str):
 
     if response.status_code == 200:
         access_token = response.json().get("access_token")
-        # TODO: guardar en Postgres (shop, access_token, user_id)
-        return {"mensaje": "Autorización exitosa", "shop": shop, "access_token": access_token}
+        return {
+            "mensaje": "Autorización exitosa",
+            "shop": shop,
+            "access_token": access_token
+        }
     else:
-        return {"error": "No se pudo obtener el token", "detalles": response.text}
+        return {
+            "error": "No se pudo obtener el token",
+            "detalles": response.text
+        }
