@@ -1,12 +1,18 @@
-[app]
 name = "EcomCopilot Connector"
-id = "349048373249"              # Este es el App ID que aparece en la URL del dashboard
-handle = "ecomcopilot-connector" # Identificador único de la app
+handle = "ecomcopilot-connector"
+client_id = "3b407c5dc62a8a04687707e38dc8cc23"
+application_url = "https://shopify-saas-backend-zp36.onrender.com"
+embedded = true
 
 [auth]
 redirect_urls = [
-  "https://e8bd-154-192-63-70.ngrok-free.app/auth/shopify/callback"
+  "https://shopify-saas-backend-zp36.onrender.com/auth/shopify/callback"
 ]
 
-[app_url]
-url = "https://e8bd-154-192-63-70.ngrok-free.app"
+[webhooks]
+api_version = "2026-04"
+
+[access_scopes]
+scopes = "read_checkouts,read_orders,read_products"
+optional_scopes = [ "read_customers" ]
+use_legacy_install_flow = false
